@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Product;
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        $products = Product::all();
+        return view('layouts.product.view', compact('products'));
+    }
+
+    public function add()
+    {
+        return view('layouts.product.add');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'price' => 'required|numeric|min:0',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $product = new Product();
+            $product->name = $validated['name'];
+            $product->description = $validated['description'];
+            $product->price = $validated['price'];
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('assets/pro_images/'), $imageName);
+                $product->image = 'assets/pro_images/' . $imageName;
+            }
+
+            $product->save();
+
+            return redirect()->back()->with('success', 'Product added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('layouts.product.edit', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $product = Product::findOrFail($id);
+
+            $product->name = $validated['name'];
+            $product->description = $validated['description'];
+            $product->price = $validated['price'];
+
+            if ($request->hasFile('image')) {
+                if ($product->image && file_exists(public_path($product->image))) {
+                    unlink(public_path($product->image));
+                }
+
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('assets/pro_images/'), $imageName);
+                $product->image = 'assets/pro_images/' . $imageName;
+            }
+
+            $product->save();
+
+            return redirect()->back()->with('success', 'Product updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+}
