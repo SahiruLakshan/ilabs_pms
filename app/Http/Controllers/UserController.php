@@ -30,7 +30,7 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            return redirect()->route('login')->with('success', 'Registered successfully! Please login.');
+            return redirect()->route('users.login')->with('success', 'Registered successfully! Please login.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'Registration failed. Please try again.');
         }
@@ -64,6 +64,6 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Logged out successfully.');
+        return redirect()->route('users.login')->with('success', 'Logged out successfully.');
     }
 }

@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="text-center mt-3">
-                    <a href="{{ route('login') }}">Already have an account? Login</a>
+                    <a href="{{ route('users.login') }}">Already have an account? Login</a>
                 </div>
             </form>
         </div>

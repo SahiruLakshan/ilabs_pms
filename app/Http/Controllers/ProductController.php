@@ -88,4 +88,18 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Something went wrong. Please try again.');
         }
     }
+
+    public function delete($id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+            $product->delete();
+            return redirect()->back()->with('success', 'Product deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+        }
+    }
 }
