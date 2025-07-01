@@ -17,7 +17,7 @@ class Authenticate
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect()->route('users.login')->with('error', 'Please login first.');
+            return redirect()->route('users.login')->with('error', 'Please Login First.');
         }
 
         if (is_null(Auth::user()->email_verified_at)) {
