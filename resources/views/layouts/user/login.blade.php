@@ -1,5 +1,5 @@
 @extends('root')
-
+@section('title', 'PMS - Login')
 @section('content')
     <div class="container d-flex justify-content-center align-items-center"">
         <div class="col-md-4 login-box">
