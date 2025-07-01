@@ -13,11 +13,11 @@
 
     @include('components.navbar')
 
-    <h2 class="text-center my-4 p-3 bg-primary text-white rounded shadow">
-        <i class="bi bi-cart-dash"></i> <b>PRODUCT MANAGEMENT SYSTEM</b>
-    </h2>
-
-    @yield('content')
+        <h2 class="text-center my-4 p-3 bg-primary text-white rounded shadow">
+            <i class="bi bi-cart-dash"></i> <b>PRODUCT MANAGEMENT SYSTEM</b>
+        </h2>
+    
+        @yield('content')
 
     @include('components.footer')
 
