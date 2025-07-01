@@ -18,6 +18,7 @@ class ProductController extends Controller
         return view('layouts.product.add');
     }
 
+    //product add
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -54,6 +55,7 @@ class ProductController extends Controller
         return view('layouts.product.edit', compact('product'));
     }
 
+    //product update
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -89,6 +91,7 @@ class ProductController extends Controller
         }
     }
 
+    //product delete
     public function delete($id)
     {
         try {

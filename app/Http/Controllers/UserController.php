@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 
 use Illuminate\Http\Request;
 
@@ -15,24 +19,39 @@ class UserController extends Controller
         return view('layouts.user.register');
     }
 
+    //Register
     public function submit(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|email:rfc,dns|unique:users,email',
+            'password' => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(8)->mixedCase()->letters()->numbers()->symbols(),
+            ],
         ]);
 
         try {
-            User::create([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
 
-            return redirect()->route('users.login')->with('success', 'Registered successfully! Please login.');
+            $verificationUrl = URL::temporarySignedRoute(
+                'verify.email',
+                now()->addMinutes(60),
+                ['id' => $user->id]
+            );
+
+            Mail::to($user->email)->send(new VerifyEmail($user, $verificationUrl));
+
+            return redirect()->route('users.login')
+                ->with('success', 'Registered! Please check your email to verify.');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Registration failed. Please try again.');
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }
 
@@ -41,6 +60,7 @@ class UserController extends Controller
         return view('layouts.user.login');
     }
 
+    //Login
     public function userlogin(Request $request)
     {
         $request->validate([
@@ -58,6 +78,7 @@ class UserController extends Controller
         return redirect()->back()->withInput()->with('error', 'Credinitials do not match our records.');
     }
 
+    //Logout
     public function logout(Request $request)
     {
         Auth::logout();

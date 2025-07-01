@@ -17,7 +17,11 @@ class Authenticate
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect()->route('users.login')->with('error', 'Please login to access this page.');
+            return redirect()->route('users.login')->with('error', 'Please login first.');
+        }
+
+        if (is_null(Auth::user()->email_verified_at)) {
+            return redirect()->route('verification.notice')->with('error', 'Please verify your email address.');
         }
 
         return $next($request);
