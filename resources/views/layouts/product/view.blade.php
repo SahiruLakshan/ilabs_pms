@@ -71,7 +71,8 @@
                             <a href="{{ route('product.edit', $product->id) }}" class="btn btn-warning">
                                 Edit
                             </a>
-                            <a href="{{ route('product.delete', $product->id) }}" class="btn btn-danger">
+                            <a href="{{ route('product.delete', $product->id) }}" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this product?');">
                                 Delete
                             </a>
                         </td>

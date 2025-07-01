@@ -2,7 +2,7 @@
 @section('content')
     <div class="container d-flex justify-content-center align-items-center">
         <div class="col-md-6 login-box">
-            <h3 class="text-center mb-4">Submit Product</h3>
+            <h3 class="text-center mb-4">Edit Product - {{ $product->name }}</h3>
 
             {{-- Success Alert --}}
             @if (session('success'))

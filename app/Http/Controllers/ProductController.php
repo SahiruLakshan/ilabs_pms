@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         return view('layouts.product.view', compact('products'));
     }
 
@@ -30,6 +31,7 @@ class ProductController extends Controller
 
         try {
             $product = new Product();
+            $product->user_id = Auth::user()->id; 
             $product->name = $validated['name'];
             $product->description = $validated['description'];
             $product->price = $validated['price'];
@@ -51,7 +53,10 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($id)->where('user_id', Auth::user()->id)->first();
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found or you do not have permission to edit this product.');
+        }
         return view('layouts.product.edit', compact('product'));
     }
 
@@ -95,7 +100,7 @@ class ProductController extends Controller
     public function delete($id)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = Product::findOrFail($id)->where('user_id', Auth::user()->id)->first();
             if ($product->image && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));
             }
