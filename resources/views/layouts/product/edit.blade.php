@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image</label>
+                    <label for="image" class="form-label">Image (Maximum Size: 2MB)</label><br>
                     <img src="{{ asset($product->image) }}" width="100"><br><br>
                     <input type="file" name="image" class="form-control" required>
                     @error('image')

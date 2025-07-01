@@ -60,7 +60,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="image" class="form-label">Image</label>
+                <label for="image" class="form-label">Image (Maximum Size: 2MB)</label>
                 <input type="file" name="image" class="form-control" required>
                 @error('image')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
