@@ -53,7 +53,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id)->where('user_id', Auth::user()->id)->first();
+        $product = Product::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
         if (!$product) {
             return redirect()->back()->with('error', 'Product not found or you do not have permission to edit this product.');
         }
