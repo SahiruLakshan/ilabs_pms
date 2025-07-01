@@ -56,7 +56,7 @@
 
                 <div class="mb-3">
                     <label for="price" class="form-label">Price (LKR)</label>
-                    <input type="number" name="price" class="form-control" value="{{ old('price', $product->price) }}"
+                    <input type="number" name="price" class="form-control" min="1" value="{{ old('price', $product->price) }}"
                         required>
                     @error('price')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
