@@ -48,7 +48,7 @@ class UserController extends Controller
 
             Mail::to($user->email)->send(new VerifyEmail($user, $verificationUrl));
 
-            return redirect()->route('users.login')
+            return redirect()->route('login')
                 ->with('success', 'Registered! Please check your email to verify.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', $e->getMessage());
@@ -84,6 +84,6 @@ class UserController extends Controller
         Auth::logout();
         $request->session()->invalidate();
 
-        return redirect()->route('users.login')->with('success', 'Logged out successfully.');
+        return redirect()->route('login')->with('success', 'Logged out successfully.');
     }
 }

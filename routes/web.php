@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::get('/login',[UserController::class,'login'])->name('users.login');
+Route::get('/login',[UserController::class,'login'])->name('login');
 Route::post('/login',[UserController::class,'userlogin'])->name('login.submit');;
 Route::get('/register',[UserController::class,'register'])->name('register.view');
 Route::post('/register',[UserController::class,'submit'])->name('register');
@@ -16,19 +16,19 @@ Route::post('/logout',[UserController::class,'logout'])->name('user.logout');
 
 Route::get('/verify-email/{id}', function ($id, Request $request) {
     if (!$request->hasValidSignature()) {
-        return redirect()->route('users.login')->with('error', 'Invalid or expired verification link.');
+        return redirect()->route('login')->with('error', 'Invalid or expired verification link.');
     }
 
     $user = User::findOrFail($id);
 
     if ($user->email_verified_at) {
-        return redirect()->route('users.login')->with('info', 'Email already verified.');
+        return redirect()->route('login')->with('info', 'Email already verified.');
     }
 
     $user->email_verified_at = now();
     $user->save();
 
-    return redirect()->route('users.login')->with('success', 'Email verified! You can now log in.');
+    return redirect()->route('login')->with('success', 'Email verified! You can now log in.');
 })->name('verify.email')->middleware('signed');
 
 Route::get('/email/verify', function () {

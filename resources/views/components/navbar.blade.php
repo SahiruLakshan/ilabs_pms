@@ -28,7 +28,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.login') }}">Sign In</a>
+                        <a class="nav-link" href="{{ route('login') }}">Sign In</a>
                     </li>
                 @endif
             </ul>

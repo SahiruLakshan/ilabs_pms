@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    //product view
     public function index()
     {
         $products = Product::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();

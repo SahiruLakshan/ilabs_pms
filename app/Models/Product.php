@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Product extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'products';
-    
+
     protected $fillable = [
         'user_id',
         'name',
@@ -19,4 +19,8 @@ class Product extends Model
         'image',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
